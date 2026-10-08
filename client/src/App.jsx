@@ -25,6 +25,12 @@ function App() {
     setAmount('')
   }
 
+  function handleDelete(id) {
+    setExpenses(expenses.filter(expense => expense.id !== id))
+  }
+
+  const total = expenses.reduce((sum, expense) => sum + expense.amount, 0)
+
   return (
     <div>
       <h1>Expense Tracker</h1>
@@ -48,10 +54,13 @@ function App() {
       <ul>
         {expenses.map(expense => (
           <li key={expense.id}>
-            {`${expense.title}: $${expense.amount.toFixed(2)} on ${expense.date}`}
+            {expense.title}: $${expense.amount.toFixed(2)} on ${expense.date}
+            
+            <button onClick={() => handleDelete(expense.id)}>Delete</button>
           </li>
         ))}
       </ul>
+      <p>Total:${total.toFixed(2)}</p>
     </div>
   )
 }

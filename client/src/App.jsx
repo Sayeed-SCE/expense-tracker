@@ -10,10 +10,15 @@ function App() {
   const [expenses, setExpenses] = useState(initialExpenses)
   const [title, setTitle] = useState('')
   const [amount, setAmount] = useState('')
+  const [error, setError] = useState('')
 
   function handleSubmit(e) {
     e.preventDefault() // stop the browser from reloading the page
 
+    if (!title.trim() || Number(amount) <= 0) {
+      setError('Please enter a valid title and amount')
+      return
+    }
     const newExpense = {
       id: Date.now(),
       title,
@@ -23,6 +28,7 @@ function App() {
     setExpenses([...expenses, newExpense]) // new array, no push
     setTitle('')
     setAmount('')
+    setError('')
   }
 
   function handleDelete(id) {
@@ -50,17 +56,18 @@ function App() {
         />
         <button type="submit">Add</button>
       </form>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <ul>
         {expenses.map(expense => (
           <li key={expense.id}>
-            {expense.title}: $${expense.amount.toFixed(2)} on ${expense.date}
+            {expense.title}: ${expense.amount.toFixed(2)} on {expense.date}
             
             <button onClick={() => handleDelete(expense.id)}>Delete</button>
           </li>
         ))}
       </ul>
-      <p>Total:${total.toFixed(2)}</p>
+      <p>Total: ${total.toFixed(2)}</p>
     </div>
   )
 }
